@@ -5,7 +5,7 @@ NER PDF
 ## API de Gestion PDF
 
 Esta API en Python utiliza FastAPI y python-multipart
-para subir el archivo PDF al directorio 'upload' y almacenar su metada.
+para subir el archivo PDF al directorio 'upload' y almacenar su metada en BD Sqlite3.
 
 ### Requisitos
 
