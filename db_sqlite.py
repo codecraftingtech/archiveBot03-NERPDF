@@ -23,6 +23,7 @@ from typing import Optional, Dict, List, Any
 
 DEFAULT_DB_FOLDER = "data"
 DEFAULT_DB_NAME = "contracts.db"
+DEFAULT_TABLE_NAME = "archivoPDF"
 
 
 def init_db(db_folder: str = DEFAULT_DB_FOLDER, db_name: str = DEFAULT_DB_NAME) -> str:
@@ -59,8 +60,8 @@ def create_table_if_not_exists(conn: sqlite3.Connection) -> None:
     Crea la tabla 'archivoPDF' con la estructura solicitada.
     Tipo CLOB se representa en SQLite como 'CLOB' o 'TEXT'; SQLite es dinámico en tipos.
     """
-    create_sql = """
-    CREATE TABLE IF NOT EXISTS archivoPDF (
+    create_sql = f"""
+    CREATE TABLE IF NOT EXISTS {DEFAULT_TABLE_NAME} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         uuid TEXT UNIQUE,
         nombre VARCHAR(255),
@@ -77,8 +78,8 @@ def insert_archivo_pdf(conn: sqlite3.Connection, uuid: str, nombre: str, path: s
     Inserta un registro en archivoPDF y retorna el id generado.
     Usa consulta parametrizada para evitar inyección.
     """
-    insert_sql = """
-    INSERT INTO archivoPDF (uuid, nombre, path, metadata_json)
+    insert_sql = f"""
+    INSERT INTO {DEFAULT_TABLE_NAME} (uuid, nombre, path, metadata_json)
     VALUES (?, ?, ?, ?);
     """
     cur = conn.cursor()
@@ -91,7 +92,7 @@ def get_archivo_by_uuid(conn: sqlite3.Connection, uuid: str) -> Optional[Dict[st
     """
     Recupera un registro por uuid. Devuelve dict o None si no existe.
     """
-    sel = "SELECT * FROM archivoPDF WHERE uuid = ?;"
+    sel = f"SELECT * FROM {DEFAULT_TABLE_NAME} WHERE uuid = ?;"
     cur = conn.execute(sel, (uuid,))
     row = cur.fetchone()
     return dict(row) if row else None
@@ -101,7 +102,7 @@ def list_archivos(conn: sqlite3.Connection) -> List[Dict[str, Any]]:
     """
     Lista todos los registros de archivoPDF.
     """
-    cur = conn.execute("SELECT * FROM archivoPDF ORDER BY id DESC;")
+    cur = conn.execute(f"SELECT * FROM {DEFAULT_TABLE_NAME} ORDER BY id DESC;")
     rows = cur.fetchall()
     return [dict(r) for r in rows]
 
