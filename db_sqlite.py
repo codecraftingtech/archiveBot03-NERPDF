@@ -106,13 +106,7 @@ def list_archivos(conn: sqlite3.Connection) -> List[Dict[str, Any]]:
     rows = cur.fetchall()
     return [dict(r) for r in rows]
 
-
-# Ejemplo de uso cuando ejecutas el script directamente
-if __name__ == "__main__":
-    print("Inicializando DB en carpeta:", DEFAULT_DB_FOLDER)
-    db_file = init_db()
-    print("DB creada/abierta en:", db_file)
-
+def test_insercion()-> int:
     conn = get_connection(db_file)
     try:
         # Ejemplo de inserción
@@ -133,6 +127,22 @@ if __name__ == "__main__":
         items = list_archivos(conn)
         print("Registros en archivoPDF:", len(items))
         for it in items[:5]:
+            print(it)
+    finally:
+        conn.close()
+
+
+# Ejemplo de uso cuando ejecutas el script directamente
+if __name__ == "__main__":
+    print("Inicializando DB en carpeta:", DEFAULT_DB_FOLDER)
+    db_file = init_db()
+    print("DB creada/abierta en:", db_file)
+
+    conn = get_connection(db_file)
+    try:
+        list_archivos = list_archivos(conn)
+        print("Registros en archivoPDF:", len(list_archivos))
+        for it in list_archivos[:5]:
             print(it)
     finally:
         conn.close()
