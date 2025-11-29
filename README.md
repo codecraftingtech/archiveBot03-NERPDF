@@ -41,5 +41,10 @@ curl -X POST "http://127.0.0.1:8000/upload-pdf/" \
   -F "file=@/Users/jeason.sergio/Documents/ProyectosProgramacion/Fuentes/archivBot-NERPDF-develop/pdf/contratoTipo1.pdf" \
   -H "Accept: application/json"  
 
+# Invocacion de la API para consular elementos insertados
+  curl -X GET "http://127.0.0.1:8000/archivos/b9ead545-44b8-4a7e-8144-a5c0f85b55e5" \
+  -H "accept: application/json"
+
+
 
 El comando devolverá un JSON con las entidades reconocidas.

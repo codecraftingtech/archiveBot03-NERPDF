@@ -9,7 +9,10 @@ import os
 from typing import Dict
 
 # Importar funciones del módulo que creaste
-from db_sqlite import init_db, get_connection, insert_archivo_pdf, get_archivo_by_uuid
+from db_sqlite import (init_db, 
+                       get_connection, 
+                       insert_archivo_pdf, 
+                       get_archivo_by_uuid)
 
 app = FastAPI(title="PDF Upload -> SQLite")
 
@@ -116,3 +119,55 @@ async def upload_pdf(file: UploadFile = File(...)) -> Dict:
         "message": "Archivo subido y metadata guardada correctamente"
         }
     )
+
+@app.get("/archivos/{uuid}", summary="Obtener un archivo por UUID")
+def api_get_archivo_by_uuid(uuid: str):
+    """
+    Devuelve un registro de la tabla archivoPDF filtrando por UUID.
+    Además imprime el item recuperado en la consola del servidor.
+    """
+
+    # Asegurar ruta de la BD
+    db_path = DB_PATH
+    if not os.path.exists(db_path):
+        db_path = init_db()
+
+    conn = get_connection(db_path)
+
+    try:
+        archivo = get_archivo_by_uuid(conn, uuid)
+
+        if archivo is None:
+            print(f"[api_get_archivo_by_uuid] UUID={uuid} -> NO ENCONTRADO")
+            raise HTTPException(
+                status_code=404,
+                detail=f"No se encontró ningún archivo con uuid={uuid}",
+            )
+
+        # Imprimir en consola el item recuperado
+        print(f"[api_get_archivo_by_uuid] UUID={uuid} -> {archivo}")
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": archivo,   # aquí va el dict que devuelve get_archivo_by_uuid
+            },
+        )
+
+    except HTTPException:
+        # Re-lanzamos HTTPException sin modificar
+        raise
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al obtener el archivo: {e}",
+        )
+
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
