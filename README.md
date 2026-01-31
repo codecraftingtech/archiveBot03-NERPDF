@@ -28,9 +28,8 @@ uvicorn app_upload:app --host 127.0.0.1 --port 8000
 
 8. Invocar la API
 
-# Invocacion de la API antigua version considerando el parametro "nombre de archivo"
 # Invocacion de la API nueva version sin considerar el parametro "nombre de archivo"
-# Para MAC
+# Para MAC/WINNDOWS
 ```bash
 curl -X POST "http://127.0.0.1:8000/upload-pdf/" \
   -F "file=@/Users/jeason.sergio/Documents/ProyectosProgramacion/Fuentes/archivBot-NERPDF-develop/pdf/contratoTipo1.pdf" \
@@ -43,3 +42,4 @@ curl -X POST "http://127.0.0.1:8000/upload-pdf/" -F "file=@pdf/contratoTipo1.pdf
   curl -X GET "http://127.0.0.1:8000/archivos/b9ead545-44b8-4a7e-8144-a5c0f85b55e5" -H "accept: application/json"
 
 El comando devolverá un JSON con las entidades reconocidas.
+
