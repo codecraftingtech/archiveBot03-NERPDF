@@ -5,7 +5,10 @@ NER PDF
 ## API de Gestion PDF
 
 Esta API en Python utiliza FastAPI y python-multipart
+
 para subir el archivo PDF al directorio 'upload' y almacenar su metada en BD Sqlite3.
+
+Subir un archivo pdf y guardarlo en una carpeta temporal devolviendo un hash como ID
 
 ### Requisitos
 
@@ -41,5 +44,6 @@ curl -X POST "http://127.0.0.1:8000/upload-pdf/" -F "file=@pdf/contratoTipo1.pdf
 # Invocacion de la API para consular elementos insertados
   curl -X GET "http://127.0.0.1:8000/archivos/b9ead545-44b8-4a7e-8144-a5c0f85b55e5" -H "accept: application/json"
 
-El comando devolverá un JSON con las entidades reconocidas.
+El comando devolverá un JSON con la dirección donde se guardó el PDF y un código único
+
 
